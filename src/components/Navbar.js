@@ -38,8 +38,8 @@ const Navbar = () => {
 
     if(!isAuthenticated) {
       try {
-        await authenticate(uauth);
         const uauthMoralisConnector = new UAuthMoralisConnector();
+        await authenticate(uauth);
 
         let domainDetails = uauthMoralisConnector.uauth.user().then().catch();
         let domain = (await domainDetails).sub;
