@@ -4,6 +4,7 @@ import logo from '../logo/seahorse.jpg';
 import unstoppableDomainsLogo from '../logo/uns-logo.png';
 import {uauth} from '../connectors';
 import {UAuthMoralisConnector} from '@uauth/moralis';
+import { dom } from '@fortawesome/fontawesome-svg-core';
 
 const Navbar = () => {
   const {authenticate, isAuthenticated, isAuthenticating, user, logout } = useMoralis();
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [userAddress, setUserAddress] = useState('');
   const [userFullAddress, setUserFullAddress] = useState('');
   const [addressLink, setAddressLink] = useState('');
+  const [unstoppableDomain, setUnstoppableDomain] = useState('');
 
   const getUserAddress = async () => {
     let fullAddress = await user.get("ethAddress");
@@ -43,8 +45,9 @@ const Navbar = () => {
 
         let domainDetails = uauthMoralisConnector.uauth.user().then().catch();
         let domain = (await domainDetails).sub;
-
-        console.log("Logged in via domain: " + domain);
+        
+        localStorage.setItem("unstoppableDomain", domain);
+        setUnstoppableDomain(domain);
         console.log("Domain owner: " + (await domainDetails).wallet_address);
       } catch (error) {
         console.log(error);
@@ -68,6 +71,7 @@ const Navbar = () => {
   useEffect(() => {
     if(isAuthenticated){
       console.log('is authenticated');
+      console.log(unstoppableDomain);
       getUserAddress();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,7 +134,7 @@ const Navbar = () => {
     <div className='login-logout-div'>
       {isAuthenticated?
         <div>
-          <button id='logout' onClick={logOut} disabled={isAuthenticating}><a id='formatted-address' className='disabled' href='/'>{userAddress}</a> Logout 
+          <button id='logout' onClick={logOut} disabled={isAuthenticating}><a id='formatted-address' className='disabled' href='/'>{unstoppableDomain}</a> Logout 
           <img id='x-img' src="https://www.downloadclipart.net/thumb/17661-power-button-red-vector-thumb.png"  alt="power off logoff" />
           </button>
 

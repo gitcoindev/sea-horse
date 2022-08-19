@@ -20,10 +20,12 @@ const Home = () => {
     const [usersName, setUsersName] = useState()
     const [acctBalance, setAcctBalance] = useState(0);
 
+    const [unstoppableDomain, setUnstoppableDomain] = useState('');
+
     const usersFirstName = useRef('');
 
     if(isAuthenticated) {
-        account = (user.get('ethAddress').toString())
+        account = (user.get('ethAddress').toString());
     }
 
     if(!user)  {
@@ -99,11 +101,11 @@ const Home = () => {
 
           
           setUsersName(user.attributes.username)
-          
-          
+          let unstoppableDomain = localStorage.getItem("unstoppableDomain");
+          setUnstoppableDomain(unstoppableDomain);
+
 
         }
-       
 
     }, [user, isAuthenticated, usersName])
 
@@ -132,6 +134,11 @@ const Home = () => {
                 <div className="row">
                 <div id='welcome-div' onClick={handleAccountInfoClick}>
                   <h5 className="welcome-text">Your user id is: {user.id}</h5>
+                  {unstoppableDomain?
+                  <h5 className="welcome-text">Your unstoppable domain is: {unstoppableDomain}</h5>
+                  :
+                  <></>
+                  }
                   <h5 className="welcome-text">Your eth account is: <a style={{color: 'white', fontWeight: 'bolder'}} href={'https://ropsten.etherscan.io/address/'+account} target='_blank' rel='noreferrer'>{account}</a></h5>
                   <h5 className="welcome-text">Your balance is: <a style={{color: 'white', fontWeight: 'bolder'}} href='/'>{acctBalance}</a></h5>
                 </div>
